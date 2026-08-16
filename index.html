@@ -478,7 +478,7 @@ const CONFIG = {
   
   bride: {
     name: "Lulu Lutpiani",
-    parents: "Putri kedua dari Bapak Wawan &amp; Ibu Safitri",
+    parents: "Putri kedua dari Bapak Wawan &amp; Ibu Sawitri",
     instagram: "https://instagram.com/lulss.lutpiani_",
     photo: "galeri_photo/DSC_8327.jpg"
   },
@@ -719,22 +719,51 @@ const CONFIG = {
     });
   });
 
-  $('rsvp-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const name = $('f-name').value.trim();
-    const msg = $('f-msg').value.trim();
-    if(!name || !msg) return;
+  $('rsvp-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = $('f-name').value.trim();
+  const msg = $('f-msg').value.trim();
+  if(!name || !msg) return;
+
+  // Data yang akan dikirim
+  const data = {
+    name: name,
+    status: currentAttend,
+    msg: msg
+  };
+
+  // Kirim ke Google Sheets via Apps Script
+  try {
+    const response = await fetch(CONFIG.appsScriptUrl, {
+      method: 'POST',
+      mode: 'no-cors', // Biar gak kena CORS
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    // Simpan ke localStorage (biar muncul di daftar komentar)
     const list = loadComments();
     const now = new Date();
     const ts = `${String(now.getDate()).padStart(2,'0')}-${String(now.getMonth()+1).padStart(2,'0')}-${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
     list.push({ name, status: currentAttend, msg, ts });
     saveComments(list);
     renderComments();
+
+    // Reset form
     e.target.reset();
     currentAttend = 'Hadir';
     document.querySelectorAll('.attend-btn').forEach(b => b.classList.remove('active'));
     document.querySelector('.attend-btn[data-val="Hadir"]').classList.add('active');
-  });
+
+    alert('Terima kasih! Ucapan dan doa restu Anda telah terkirim.');
+
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Gagal mengirim. Coba lagi nanti.');
+  }
+});
 
 })();
 </script>
