@@ -704,10 +704,7 @@ const CONFIG = {
   },
 
   // komentar awal, seed / contoh
-  seedComments: [
-    { name: "Salsa & partner", status: "Hadir", msg: "Selamat menempuh hidup baru, semoga samawa sampai jannah!", ts: "05-07-2026 20:12" },
-    { name: "Dimas", status: "Hadir", msg: "Akhirnya yang ditunggu-tunggu tiba juga, bahagia terus ya kalian berdua.", ts: "03-07-2026 09:40" }
-  ]
+  seedComments: []
 };
 
 /* =========================================================
@@ -834,14 +831,6 @@ const CONFIG = {
     }
   });
   document.body.style.overflow = 'hidden';
-
-  // $('music-toggle').addEventListener('click', () => {
-  //   const audio = $('bg-music');
-  //   if(!CONFIG.musicUrl) return;
-  //   if(audio.paused){ audio.play(); $('music-toggle').classList.remove('paused'); }
-  //   else { audio.pause(); $('music-toggle').classList.add('paused'); }
-  // });
-// Music toggle
     const musicToggle = $('music-toggle');
     const bgMusic = $('bg-music');
     
@@ -852,7 +841,6 @@ const CONFIG = {
             musicToggle.classList.remove('paused');
           })
           .catch(() => {
-            // Auto-play di-block browser
             alert('Klik tombol untuk memutar musik');
             musicToggle.classList.add('paused');
           });
@@ -861,13 +849,10 @@ const CONFIG = {
         musicToggle.classList.add('paused');
       }
     });
-    
-    // Saat audio selesai diputar (loop)
+
     bgMusic.addEventListener('ended', () => {
       bgMusic.play().catch(() => {});
     });
-    
-    // Update tombol status saat audio berubah
     bgMusic.addEventListener('play', () => {
       musicToggle.classList.remove('paused');
     });
@@ -875,8 +860,6 @@ const CONFIG = {
     bgMusic.addEventListener('pause', () => {
       musicToggle.classList.add('paused');
     });
-    
-    // Jika ada error saat loading audio
     bgMusic.addEventListener('error', () => {
       console.warn('Audio gagal dimuat');
       musicToggle.style.opacity = '0.5';
@@ -892,41 +875,77 @@ const CONFIG = {
   // ---------- RSVP / Comments (localStorage demo — ganti ke backend nanti) ----------
   const STORAGE_KEY = 'rsvp_comments_demo';
   function loadComments(){
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : CONFIG.seedComments.slice();
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    return JSON.parse(stored);
   }
+  // Jika tidak ada di localStorage, ambil dari Google Sheets
+  return fetchCommentsFromSheet();
+  }
+  async function fetchCommentsFromSheet() {
+  try {
+    const response = await fetch(CONFIG.appsScriptUrl);
+    const data = await response.json();
+    
+    // Format data dari Sheets ke format komentar
+    const comments = data.map(row => ({
+      name: row.name || 'Anonim',
+      status: row.status || 'Hadir',
+      msg: row.msg || '',
+      ts: row.ts || new Date().toLocaleDateString('id-ID')
+    }));
+    
+    // Simpan ke localStorage sebagai cache
+    saveComments(comments);
+    return comments;
+    
+  } catch (error) {
+    console.error('Gagal fetch dari Google Sheets:', error);
+    return []; // Kosong jika error
+  }
+  }
+  
   function saveComments(list){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   }
-  function renderComments(){
-    const list = loadComments();
-    const wrap = $('comment-list');
-    wrap.innerHTML = '';
-    let yes = 0, no = 0;
-    list.slice().reverse().forEach(c => {
-      if(c.status === 'Hadir') yes++; else no++;
-      const div = document.createElement('div');
-      div.className = 'comment';
-      div.innerHTML = `
-        <div class="head">
-          <span class="name">${escapeHtml(c.name)}</span>
-          <span class="status ${c.status === 'Hadir' ? 'yes' : 'no'}">${c.status}</span>
-        </div>
-        <div class="msg">${escapeHtml(c.msg)}</div>
-        <div class="ts">${c.ts}</div>`;
-      wrap.appendChild(div);
-    });
-    $('stat-yes').textContent = yes;
-    $('stat-no').textContent = no;
+  async function renderComments(){
+  const list = await loadComments();
+  const wrap = $('comment-list');
+  wrap.innerHTML = '';
+  let yes = 0, no = 0;
+  
+  if (list.length === 0) {
+    // Tampilkan pesan kosong
+    wrap.innerHTML = `<div style="text-align:center;color:#8a8a7c;padding:20px;font-size:.85rem;">Belum ada ucapan. Jadilah yang pertama!</div>`;
+    $('stat-yes').textContent = '0';
+    $('stat-no').textContent = '0';
+    return;
   }
+  
+  list.slice().reverse().forEach(c => {
+    if(c.status === 'Hadir') yes++; else no++;
+    const div = document.createElement('div');
+    div.className = 'comment';
+    div.innerHTML = `
+      <div class="head">
+        <span class="name">${escapeHtml(c.name)}</span>
+        <span class="status ${c.status === 'Hadir' ? 'yes' : 'no'}">${c.status}</span>
+      </div>
+      <div class="msg">${escapeHtml(c.msg)}</div>
+      <div class="ts">${c.ts}</div>`;
+    wrap.appendChild(div);
+  });
+  $('stat-yes').textContent = yes;
+  $('stat-no').textContent = no;
+  }
+  
   function escapeHtml(str){
     const d = document.createElement('div');
     d.textContent = str;
     return d.innerHTML;
   }
   renderComments();
-
-  let currentAttend = 'Hadir';
+   let currentAttend = 'Hadir';
   document.querySelectorAll('.attend-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.attend-btn').forEach(b => b.classList.remove('active'));
@@ -935,53 +954,54 @@ const CONFIG = {
     });
   });
 
+  // ===== SUBMIT FORM =====
   $('rsvp-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const name = $('f-name').value.trim();
-  const msg = $('f-msg').value.trim();
-  if(!name || !msg) return;
+    e.preventDefault();
+    const name = $('f-name').value.trim();
+    const msg = $('f-msg').value.trim();
+    if (!name || !msg) {
+      alert('Harap isi nama dan ucapan!');
+      return;
+    }
 
-  // Data yang akan dikirim
-  const data = {
-    name: name,
-    status: currentAttend,
-    msg: msg
-  };
+    const data = {
+      name: name,
+      status: currentAttend,
+      msg: msg
+    };
 
-  // Kirim ke Google Sheets via Apps Script
-  try {
-    const response = await fetch(CONFIG.appsScriptUrl, {
-      method: 'POST',
-      mode: 'no-cors', // Biar gak kena CORS
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
+    try {
+      // Kirim ke Google Sheets
+      await fetch(CONFIG.appsScriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
 
-    // Simpan ke localStorage (biar muncul di daftar komentar)
-    const list = loadComments();
-    const now = new Date();
-    const ts = `${String(now.getDate()).padStart(2,'0')}-${String(now.getMonth()+1).padStart(2,'0')}-${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-    list.push({ name, status: currentAttend, msg, ts });
-    saveComments(list);
-    renderComments();
+      // Hapus cache localStorage
+      localStorage.removeItem(STORAGE_KEY);
 
-    // Reset form
-    e.target.reset();
-    currentAttend = 'Hadir';
-    document.querySelectorAll('.attend-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('.attend-btn[data-val="Hadir"]').classList.add('active');
+      // Refresh komentar dari Sheets
+      await renderComments();
 
-    alert('Terima kasih! Ucapan dan doa restu Anda telah terkirim.');
+      // Reset form
+      e.target.reset();
+      currentAttend = 'Hadir';
+      document.querySelectorAll('.attend-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.attend-btn[data-val="Hadir"]').classList.add('active');
 
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Gagal mengirim. Coba lagi nanti.');
-  }
-});
+      alert('Terima kasih! Ucapan dan doa restu Anda telah terkirim.');
+
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Gagal mengirim. Coba lagi nanti.');
+    }
+  });
 
 })();
-</script>
-</body>
+</script> 
+ </body>
 </html>
