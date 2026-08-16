@@ -293,6 +293,170 @@
   }
   #music-toggle svg{width:18px; height:18px;}
   #music-toggle.paused svg{opacity:.5;}
+  /* ===== MUSIC TOGGLE ===== */
+#music-toggle {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 60;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--sage-deep);
+  color: var(--ivory);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+#music-toggle:hover {
+  transform: scale(1.08);
+  border-color: var(--gold);
+}
+
+#music-toggle .music-icon {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Efek gelombang suara */
+#music-toggle .wave {
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Saat musik diputar (play) */
+#music-toggle:not(.paused) .wave {
+  opacity: 1;
+}
+
+#music-toggle:not(.paused) .wave1 {
+  animation: waveAnim 1.2s ease-in-out infinite;
+}
+
+#music-toggle:not(.paused) .wave2 {
+  animation: waveAnim 1.2s ease-in-out 0.3s infinite;
+}
+
+@keyframes waveAnim {
+  0%, 100% {
+    transform: scaleY(0.7);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(1.3);
+    opacity: 1;
+  }
+}
+
+/* Ripple effect (lingkaran berdenyut) */
+#music-toggle .ripple {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#music-toggle:not(.paused) .ripple {
+  animation: rippleAnim 1.8s ease-out infinite;
+}
+
+@keyframes rippleAnim {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* Saat di-pause */
+#music-toggle.paused {
+  background: rgba(62, 78, 54, 0.7);
+  border-color: rgba(255,255,255,0.1);
+}
+
+#music-toggle.paused .wave {
+  opacity: 0 !important;
+}
+
+#music-toggle.paused .ripple {
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+/* Badge notifikasi */
+#music-toggle .badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  background: var(--gold);
+  border-radius: 50%;
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  font-weight: 600;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+
+#music-toggle:not(.paused) .badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Animasi bounce saat pertama kali muncul */
+#music-toggle {
+  animation: bounceIn 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  #music-toggle {
+    width: 48px;
+    height: 48px;
+    bottom: 16px;
+    right: 16px;
+  }
+  #music-toggle .music-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+  
 
   @media (max-width:480px){
     section{padding:64px 22px;}
@@ -459,9 +623,20 @@
 
 <div id="lightbox"><span class="close">&times;</span><img id="lightbox-img" alt=""></div>
 
-<button id="music-toggle" class="paused" aria-label="Putar/Jeda Musik">
+<!-- <button id="music-toggle" class="paused" aria-label="Putar/Jeda Musik">
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="16" r="3" fill="currentColor" stroke="none"/></svg>
-</button>
+</button> -->
+<button id="music-toggle" class="paused" aria-label="Putar/Jeda Musik">
+  <svg class="music-icon" viewBox="0 0 24 24" fill="currentColor">
+    <!-- Icon speaker -->
+    <path d="M3 9v6h4l5 5V4L7 9H3z" stroke="none"/>
+    <!-- Gelombang suara -->
+    <path class="wave wave1" d="M16 8c1.5 1.5 1.5 6 0 7.5"/>
+    <path class="wave wave2" d="M19 5c3 3 3 11 0 14"/>
+  </svg>
+  <div class="ripple"></div>
+  <div class="badge">♪</div>
+</button> 
 <audio id="bg-music" loop></audio>
 
 <script>
@@ -660,13 +835,54 @@ const CONFIG = {
   });
   document.body.style.overflow = 'hidden';
 
-  $('music-toggle').addEventListener('click', () => {
-    const audio = $('bg-music');
-    if(!CONFIG.musicUrl) return;
-    if(audio.paused){ audio.play(); $('music-toggle').classList.remove('paused'); }
-    else { audio.pause(); $('music-toggle').classList.add('paused'); }
-  });
-
+  // $('music-toggle').addEventListener('click', () => {
+  //   const audio = $('bg-music');
+  //   if(!CONFIG.musicUrl) return;
+  //   if(audio.paused){ audio.play(); $('music-toggle').classList.remove('paused'); }
+  //   else { audio.pause(); $('music-toggle').classList.add('paused'); }
+  // });
+// Music toggle
+    const musicToggle = $('music-toggle');
+    const bgMusic = $('bg-music');
+    
+    musicToggle.addEventListener('click', () => {
+      if (bgMusic.paused) {
+        bgMusic.play()
+          .then(() => {
+            musicToggle.classList.remove('paused');
+          })
+          .catch(() => {
+            // Auto-play di-block browser
+            alert('Klik tombol untuk memutar musik');
+            musicToggle.classList.add('paused');
+          });
+      } else {
+        bgMusic.pause();
+        musicToggle.classList.add('paused');
+      }
+    });
+    
+    // Saat audio selesai diputar (loop)
+    bgMusic.addEventListener('ended', () => {
+      bgMusic.play().catch(() => {});
+    });
+    
+    // Update tombol status saat audio berubah
+    bgMusic.addEventListener('play', () => {
+      musicToggle.classList.remove('paused');
+    });
+    
+    bgMusic.addEventListener('pause', () => {
+      musicToggle.classList.add('paused');
+    });
+    
+    // Jika ada error saat loading audio
+    bgMusic.addEventListener('error', () => {
+      console.warn('Audio gagal dimuat');
+      musicToggle.style.opacity = '0.5';
+      musicToggle.style.pointerEvents = 'none';
+    });
+    
   // ---------- Scroll reveal ----------
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
