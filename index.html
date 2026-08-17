@@ -209,9 +209,13 @@
   .gallery-track-top, .gallery-track-bottom{display:none;}
   .gallery-grid:hover .gallery-track{animation-play-state:paused;}
 
-  @keyframes shuffle{from{transform:translateX(0);} to{transform:translateX(-50%);}}
-  @keyframes shuffle-reverse{from{transform:translateX(-50%);} to{transform:translateX(0);}}
+  /* @keyframes shuffle{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  @keyframes shuffle-reverse{from{transform:translateX(-50%);} to{transform:translateX(0);}} */
+  @keyframes shuffle{from{transform:translateZ(0) translateX(0);} to{transform:translateZ(0) translateX(-50%);}}
+  @keyframes shuffle-reverse{from{transform:translateZ(0) translateX(-50%);} to{transform:translateZ(0) translateX(0);}}
 
+
+  
   @media(max-width:600px){
   .gallery-track-desktop{display:none;}
   .gallery-track-top{display:flex; animation:shuffle 20s linear infinite; margin-bottom:6px;}
@@ -1012,7 +1016,22 @@ const CONFIG = {
     }
   });
 
-})();
-</script> 
+    })();
+    </script>
+      <script>
+    // Preload semua gallery foto saat page load
+    if (CONFIG.gallery && CONFIG.gallery.length > 0) {
+      CONFIG.gallery.forEach(url => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = url;
+        document.head.appendChild(link);
+      });
+    }
+    </script>
+
+
+  
  </body>
 </html>
