@@ -1066,6 +1066,21 @@ const CONFIG = {
       });
     }
     </script>
+  <script>
+  const bgMusic = document.getElementById('bg-music');
+  const musicToggle = document.getElementById('music-toggle');
   
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      // Tab tidak aktif → pause musik
+      bgMusic.pause();
+      musicToggle.classList.add('paused');
+    } else {
+      // Tab aktif kembali → auto-resume (optional)
+      // bgMusic.play();
+      // musicToggle.classList.remove('paused');
+    }
+  });
+  </script>
  </body>
 </html>
