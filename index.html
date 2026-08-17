@@ -89,6 +89,12 @@
     transition:transform .9s var(--ease), opacity .9s var(--ease), visibility .9s var(--ease);
   }
   #cover.hide{opacity:0; visibility:hidden; pointer-events:none; transform:translateY(-100%);}
+    /* Desktop - ambil top (muka keliatan) */
+  @media(min-width:768px){
+    #cover{
+      background:linear-gradient(180deg, rgba(30,38,26,.55), rgba(30,38,26,.72)), var(--cover-img) center top/cover no-repeat;
+    }
+  }
   #cover .eyebrow{color:var(--blush); opacity:.85;}
   #cover h1{font-size:clamp(2.2rem,7vw,3.4rem); margin:10px 0 26px; font-style:italic;}
   #cover .to-label{font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; opacity:.75; margin-bottom:6px;}
@@ -555,6 +561,9 @@
       <div class="box"><div class="num" id="cd-mins">0</div><div class="label">Menit</div></div>
       <div class="box"><div class="num" id="cd-secs">0</div><div class="label">Detik</div></div>
     </div>
+    <a class="map-btn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Lulu+%26+Rojak&dates=20260906T090000/20260906T180000&details=Undangan+pernikahan+kami&location=Jl.+Karya+Bakti+Timur,+Jakarta+Barat" target="_blank" style="margin-top:28px;">
+      Simpan Tanggal
+    </a>
   </section>
 
   <section id="events" class="reveal">
@@ -713,7 +722,7 @@ const CONFIG = {
   // kontainer untuk kirim hadiah
   giftAddress: {
   recipient: "Lulu Lutpiani",
-  detail: "Jl. Karya Bakti Timur, Cengkareng, Jakarta Barat"
+  detail: "Jl. Karya Bakti Timur, Cengkareng, Jakarta Barat (+62 896-3933-1561)"
   },
 
   // komentar awal, seed / contoh
