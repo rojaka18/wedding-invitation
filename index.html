@@ -1,23 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
-<!-- ===== OPEN GRAPH / SOCIAL MEDIA PREVIEW ===== -->
 <meta property="og:title" content="Undangan Pernikahan Lulu & Rojak" />
 <meta property="og:description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada pernikahan kami." />
 <meta property="og:url" content="https://rojaka18.github.io/wedding-invitation/" />
 <meta property="og:image" content="https://rojaka18.github.io/wedding-invitation/galeri_photo/1.jpeg" />
 <meta property="og:type" content="website" />
-
-<!-- Untuk X (Twitter) -->
-<meta name="twitter:card" content="summary_large_image" />
-  
+<meta name="twitter:card" content="summary_large_image" />  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Wedding invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="icon" href="galeri_photo/wedding-rings.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -59,8 +53,6 @@
     text-transform:uppercase;
     color:var(--sage-mid);
   }
-
-  /* ---------- ornament (signature element) ---------- */
   .ornament{width:64px; height:auto; opacity:.85;}
   .ornament path{stroke:var(--gold); fill:none; stroke-width:1.3;}
   .divider{
@@ -77,12 +69,10 @@
     text-align:center;
   }
 
-  /* ---------- COVER ---------- */
   #cover{
     position:fixed; inset:0; z-index:100;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     background:linear-gradient(180deg, rgba(30,38,26,.55), rgba(30,38,26,.72)), var(--cover-img) center/cover no-repeat;
-    /* background:linear-gradient(180deg, rgba(30,38,26,.55), rgba(30,38,26,.72)), var(--cover-img) center bottom/cover no-repeat; */
     color:var(--ivory);
     text-align:center;
     padding:40px 24px;
@@ -90,7 +80,6 @@
     transition:transform .9s var(--ease), opacity .9s var(--ease), visibility .9s var(--ease);
   }
   #cover.hide{opacity:0; visibility:hidden; pointer-events:none; transform:translateY(-100%);}
-    /* Desktop - ambil top (muka keliatan) */
   @media(min-width:768px){
   #cover{
     background:linear-gradient(180deg, rgba(30,38,26,.55), rgba(30,38,26,.72)), var(--cover-img) center 30%/cover no-repeat;
@@ -120,14 +109,6 @@
   .reveal{opacity:0; transform:translateY(24px); transition:opacity .8s var(--ease), transform .8s var(--ease);}
   .reveal.in{opacity:1; transform:translateY(0);}
 
-  /* ---------- HERO ---------- */
-  /* #hero{
-    max-width:none; padding:0; height:100vh; min-height:640px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; */
-    /* background:var(--cover-img) center/cover no-repeat; */
-    /* background:var(--hero-img) center/cover no-repeat;
-    color:var(--ivory);
-  } */
   #hero{
   max-width:none; padding:0; height:100vh; min-height:640px;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -135,12 +116,17 @@
   color:var(--ivory);
   }
 
+  @media(min-width: 1024px){
+    #hero {
+      background-position: center 42% !important;
+    }
+  }
+  @media(max-width: 768px){
+    #hero {
+      background-position: center 60% !important;
+    }
+  }
 
-  
-  /* #hero::before{
-    content:''; position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(30,38,26,.35), rgba(30,38,26,.6));
-  } */
   #hero::before{
   content:''; position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(20,20,16,.55), rgba(20,20,16,.5), rgba(20,20,16,.65));
@@ -234,12 +220,8 @@
   .gallery-track-top, .gallery-track-bottom{display:none;}
   .gallery-grid:hover .gallery-track{animation-play-state:paused;}
 
-  /* @keyframes shuffle{from{transform:translateX(0);} to{transform:translateX(-50%);}}
-  @keyframes shuffle-reverse{from{transform:translateX(-50%);} to{transform:translateX(0);}} */
   @keyframes shuffle{from{transform:translateZ(0) translateX(0);} to{transform:translateZ(0) translateX(-50%);}}
   @keyframes shuffle-reverse{from{transform:translateZ(0) translateX(-50%);} to{transform:translateZ(0) translateX(0);}}
-
-
   
   @media(max-width:600px){
   .gallery-track-desktop{display:none;}
@@ -256,10 +238,38 @@
   #lightbox .close{position:absolute; top:24px; right:28px; color:var(--ivory); font-size:1.6rem;}
 
   /* ---------- GIFT ---------- */
-  .gift-card{
-    background:var(--blush); border:1px solid var(--line); padding:30px 26px; text-align:left;
-    display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px;
-  }
+    .gift-card .bank-logo {
+        width: 60px; /* Sesuaikan ukuran */
+        height: auto;
+        flex-shrink: 0; /* Cegah logo mengecil */
+        margin-right: 10px;
+    }
+
+    /* Atur ulang tata letak card */
+    .gift-card .bank-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+
+    .gift-card .bank-details {
+        display: flex;
+        flex-direction: column;
+    }
+  
+    .gift-card{
+    background: #FFFFFF; /* PUTIH */
+    border:1px solid var(--line);
+    padding:30px 26px;
+    text-align:left;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:14px;
+    border-radius: 12px;
+    }
   .gift-card .bank{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--sage-mid); margin-bottom:6px;}
   .gift-card .acc-num{font-family:'Cormorant Garamond',serif; font-size:1.5rem; letter-spacing:.03em;}
   .gift-card .acc-name{font-size:.8rem; color:#5c5c4f; margin-top:2px;}
@@ -268,6 +278,39 @@
     border:1px solid var(--sage-mid); padding:8px 16px; white-space:nowrap; flex-shrink:0;
     transition:background .3s var(--ease), color .3s var(--ease);
   }
+  .gift-card .bank {
+  display: none !important;
+}
+
+/* Atur layout info bank */
+.gift-card .bank-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.gift-card .bank-logo {
+  width: 70px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.gift-card .bank-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.gift-card .copy-btn {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
   .copy-btn:hover{background:var(--sage-deep); color:var(--ivory); border-color:var(--sage-deep);}
   .copy-btn.copied{background:var(--gold); color:var(--ink); border-color:var(--gold);}
   /* .gift-note{font-size:.82rem; color:#5c5c4f; line-height:1.7; text-align:left; margin-top:14px;} */
@@ -748,9 +791,6 @@ const CONFIG = {
   seedComments: []
 };
 
-/* =========================================================
-   RENDER — logic di bawah ini tidak perlu diubah
-   ========================================================= */
 (function(){
   const $ = id => document.getElementById(id);
   const params = new URLSearchParams(window.location.search);
@@ -818,18 +858,33 @@ const CONFIG = {
   $('lightbox').addEventListener('click', () => $('lightbox').classList.remove('show'));
 
   const giftWrap = $('gift-accounts');
-  CONFIG.giftAccounts.forEach(acc => {
+    CONFIG.giftAccounts.forEach(acc => {
     const card = document.createElement('div');
-    card.className = 'gift-card';
+    // Tambahkan class untuk warna latar
+    const bankClass = acc.bank.toLowerCase();
+    card.className = `gift-card ${bankClass}`;
+
+    // Tentukan path logo berdasarkan bank
+    let logoSrc = '';
+    if (acc.bank === 'BCA') {
+        logoSrc = 'galeri_photo/bca.png';
+    } else if (acc.bank === 'OCBC') {
+        logoSrc = 'galeri_photo/ocbc.png';
+    }
+
     card.innerHTML = `
-      <div>
-        <div class="bank">${acc.bank}</div>
-        <div class="acc-num">${acc.number}</div>
-        <div class="acc-name">${acc.name}</div>
-      </div>
-      <button class="copy-btn" data-num="${acc.number}">Salin</button>`;
+        <div class="bank-info">
+            <img class="bank-logo" src="${logoSrc}" alt="${acc.bank} logo">
+            <div class="bank-details">
+                <div class="bank">${acc.bank}</div>
+                <div class="acc-num">${acc.number}</div>
+                <div class="acc-name">${acc.name}</div>
+            </div>
+        </div>
+        <button class="copy-btn" data-num="${acc.number}">Salin</button>
+    `;
     giftWrap.appendChild(card);
-  });
+});
   giftWrap.addEventListener('click', e => {
     if(!e.target.classList.contains('copy-btn')) return;
     navigator.clipboard.writeText(e.target.dataset.num).then(() => {
@@ -1087,8 +1142,8 @@ const CONFIG = {
       musicToggle.classList.add('paused');
     } else {
       // Tab aktif kembali → auto-resume (optional)
-      bgMusic.play();
-      musicToggle.classList.remove('paused');
+      // bgMusic.play();
+      // musicToggle.classList.remove('paused');
     }
   });
   </script>
