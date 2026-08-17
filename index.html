@@ -17,7 +17,6 @@
 <title>Wedding invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1108/1108773.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -122,12 +121,16 @@
 
   /* ---------- HERO ---------- */
   #hero{
-  max-width:none; padding:0; height:100vh; min-height:640px;
-  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
-  background:var(--hero-img) center/cover no-repeat;
-  color:var(--ivory);
-  padding-top:120px;
+    max-width:none; padding:0; height:100vh; min-height:640px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    /* background:var(--cover-img) center/cover no-repeat; */
+    background:var(--hero-img) center/cover no-repeat;
+    color:var(--ivory);
   }
+  /* #hero::before{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(30,38,26,.35), rgba(30,38,26,.6));
+  } */
   #hero::before{
   content:''; position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(20,20,16,.55), rgba(20,20,16,.5), rgba(20,20,16,.65));
@@ -221,8 +224,12 @@
   .gallery-track-top, .gallery-track-bottom{display:none;}
   .gallery-grid:hover .gallery-track{animation-play-state:paused;}
 
+  /* @keyframes shuffle{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  @keyframes shuffle-reverse{from{transform:translateX(-50%);} to{transform:translateX(0);}} */
   @keyframes shuffle{from{transform:translateZ(0) translateX(0);} to{transform:translateZ(0) translateX(-50%);}}
-  @keyframes shuffle-reverse{from{transform:translateZ(0) translateX(-50%);} to{transform:translateZ(0) translateX(0);}
+  @keyframes shuffle-reverse{from{transform:translateZ(0) translateX(-50%);} to{transform:translateZ(0) translateX(0);}}
+
+
   
   @media(max-width:600px){
   .gallery-track-desktop{display:none;}
@@ -1070,8 +1077,8 @@ const CONFIG = {
       musicToggle.classList.add('paused');
     } else {
       // Tab aktif kembali → auto-resume (optional)
-      bgMusic.play();
-      musicToggle.classList.remove('paused');
+      // bgMusic.play();
+      // musicToggle.classList.remove('paused');
     }
   });
   </script>
