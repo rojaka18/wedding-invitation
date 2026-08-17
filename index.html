@@ -311,6 +311,63 @@
   border-radius: 6px;
   transition: all 0.3s ease;
 }
+
+@media (max-width: 480px) {
+  .gift-card {
+    padding: 14px 16px;
+    flex-wrap: nowrap;
+  }
+
+  .gift-card .bank-info {
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gift-card .bank-logo {
+    width: 40px;
+  }
+
+  .gift-card .acc-num {
+    font-size: 0.95rem;
+  }
+
+  .gift-card .acc-name {
+    font-size: 0.68rem;
+  }
+
+  .gift-card .copy-btn {
+    font-size: 0.6rem;
+    padding: 5px 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .gift-card {
+    padding: 12px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .gift-card .bank-info {
+    flex: 1 1 100%;
+    gap: 8px;
+  }
+
+  .gift-card .bank-logo {
+    width: 35px;
+  }
+
+  .gift-card .acc-num {
+    font-size: 0.85rem;
+  }
+
+  .gift-card .copy-btn {
+    font-size: 0.55rem;
+    padding: 4px 10px;
+    margin-left: auto;
+  }
+}
   .copy-btn:hover{background:var(--sage-deep); color:var(--ivory); border-color:var(--sage-deep);}
   .copy-btn.copied{background:var(--gold); color:var(--ink); border-color:var(--gold);}
   /* .gift-note{font-size:.82rem; color:#5c5c4f; line-height:1.7; text-align:left; margin-top:14px;} */
@@ -768,10 +825,10 @@ const CONFIG = {
 
   gallery: [
     "galeri_photo/DSC00001.jpg", //1
-    "galeri_photo/DSC00002.JPG", //2
+    "galeri_photo/DSC00009.png", //2
     "galeri_photo/DSC00003.jpg", //3
     "galeri_photo/DSC00004.JPG", //4
-    "galeri_photo/DSC00005.jpg", //5
+    "galeri_photo/DSC00007.png", //5
     "galeri_photo/DSC00006.JPG", //6
   ],
 
