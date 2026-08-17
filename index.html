@@ -471,8 +471,6 @@
   }
 }
 
-  
-
   @media (max-width:480px){
     section{padding:64px 22px;}
     .timer{gap:14px;}
@@ -1030,8 +1028,26 @@ const CONFIG = {
       });
     }
     </script>
-
-
+    <script>
+    let scrollTimeout;
+    const galleryGrid = document.querySelector('.gallery-grid');
+    
+    if (galleryGrid) {
+      window.addEventListener('scroll', () => {
+        document.querySelectorAll('.gallery-track').forEach(track => {
+          track.style.animationPlayState = 'paused';
+        });
+        
+        clearTimeout(scrollTimeout);
+        
+        scrollTimeout = setTimeout(() => {
+          document.querySelectorAll('.gallery-track').forEach(track => {
+            track.style.animationPlayState = 'running';
+          });
+        }, 800);
+      });
+    }
+    </script>
   
  </body>
 </html>
