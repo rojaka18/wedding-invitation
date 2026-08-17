@@ -91,8 +91,8 @@
   #cover.hide{opacity:0; visibility:hidden; pointer-events:none; transform:translateY(-100%);}
     /* Desktop - ambil top (muka keliatan) */
   @media(min-width:768px){
-    #cover{
-      background:linear-gradient(180deg, rgba(30,38,26,.55), rgba(30,38,26,.72)), var(--cover-img) center top/cover no-repeat;
+  #cover{
+    background:linear-gradient(180deg, rgba(30,38,26,.55), rgba(30,38,26,.72)), var(--cover-img) center -15%/cover no-repeat;
     }
   }
   #cover .eyebrow{color:var(--blush); opacity:.85;}
@@ -188,7 +188,16 @@
   .timer .box{min-width:64px;}
   .timer .num{font-family:'Cormorant Garamond',serif; font-size:2.4rem; color:var(--gold);}
   .timer .label{font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; opacity:.75; margin-top:4px;}
-
+  .save-date-btn{
+  display:inline-block; font-size:.75rem; letter-spacing:.14em; text-transform:uppercase;
+  border:1px solid var(--gold); color:var(--ivory); padding:10px 24px;
+  margin-top:28px;
+  transition:all .3s var(--ease);
+  }
+  .save-date-btn:hover{
+    background:var(--gold); color:var(--ink);
+  }
+  
   /* ---------- EVENTS ---------- */
   .event-card{
     border:1px solid var(--line); padding:36px 26px; margin-bottom:24px;
@@ -561,9 +570,9 @@
       <div class="box"><div class="num" id="cd-mins">0</div><div class="label">Menit</div></div>
       <div class="box"><div class="num" id="cd-secs">0</div><div class="label">Detik</div></div>
     </div>
-    <a class="map-btn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Lulu+%26+Rojak&dates=20260906T090000/20260906T180000&details=Undangan+pernikahan+kami&location=Jl.+Karya+Bakti+Timur,+Jakarta+Barat" target="_blank" style="margin-top:28px;">
-      Simpan Tanggal
-    </a>
+   <a class="save-date-btn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Lulu+%26+Rojak&dates=20260906T090000/20260906T180000&details=Undangan+pernikahan+kami&location=Jl.+Karya+Bakti+Timur,+Jakarta+Barat" target="_blank">
+  Simpan Tanggal
+</a>
   </section>
 
   <section id="events" class="reveal">
