@@ -219,15 +219,18 @@
   .gallery-track-desktop{animation:shuffle 25s linear infinite;}
   .gallery-track-top, .gallery-track-bottom{display:none;}
   .gallery-grid:hover .gallery-track{animation-play-state:paused;}
-
   @keyframes shuffle{from{transform:translateZ(0) translateX(0);} to{transform:translateZ(0) translateX(-50%);}}
   @keyframes shuffle-reverse{from{transform:translateZ(0) translateX(-50%);} to{transform:translateZ(0) translateX(0);}}
   
+  /* Desktop */
+  .gallery-track-desktop{animation:shuffle 50s linear infinite;}
+  
+  /* Mobile */
   @media(max-width:600px){
-  .gallery-track-desktop{display:none;}
-  .gallery-track-top{display:flex; animation:shuffle 20s linear infinite; margin-bottom:6px;}
-  .gallery-track-bottom{display:flex; animation:shuffle-reverse 20s linear infinite;}
-  .gallery-track img{width:140px; height:186px;}
+    .gallery-track-desktop{display:none;}
+    .gallery-track-top{display:flex; animation:shuffle 40s linear infinite; margin-bottom:6px;}
+    .gallery-track-bottom{display:flex; animation:shuffle-reverse 40s linear infinite;}
+    .gallery-track img{width:140px; height:186px;}
   }
   #lightbox{
     position:fixed; inset:0; background:rgba(20,24,17,.92); z-index:200;
@@ -244,8 +247,6 @@
         flex-shrink: 0; /* Cegah logo mengecil */
         margin-right: 10px;
     }
-
-    /* Atur ulang tata letak card */
     .gift-card .bank-info {
         display: flex;
         align-items: center;
@@ -370,8 +371,6 @@
 }
   .copy-btn:hover{background:var(--sage-deep); color:var(--ivory); border-color:var(--sage-deep);}
   .copy-btn.copied{background:var(--gold); color:var(--ink); border-color:var(--gold);}
-  /* .gift-note{font-size:.82rem; color:#5c5c4f; line-height:1.7; text-align:left; margin-top:14px;} */
-
   .gift-note{font-size:.82rem; color:#5c5c4f; line-height:1.7; text-align:left; margin-top:14px;}
   .address-card{border:1px solid var(--line); border-radius:14px; padding:20px; margin-top:18px; text-align:left;}
   .address-card{background:#F3EEE3; border:1px solid var(--line); padding:30px 26px; text-align:left; margin-top:18px;}
@@ -610,13 +609,7 @@
   @media(min-width:768px){
   .portrait{width:280px; height:280px;}
   #couple{max-width:900px;}
-}
-  /* @media(min-width:768px){
-  .couple-card:first-child{text-align:left;}
-  .couple-card:first-child .portrait{margin-left:0; margin-right:auto;}
-  .couple-card:last-child{text-align:right;}
-  .couple-card:last-child .portrait{margin-left:auto; margin-right:0;}
-} */
+
 </style>
 </head>
 <body>
@@ -629,8 +622,6 @@
   <div class="to-name" id="guest-name"></div>
   <button id="open-btn">
     Buka Undangan
-    <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-  </button> -->
 </div>
 
 <!-- ================= APP ================= -->
@@ -662,7 +653,7 @@
       <div class="parents" id="bride-parents"></div>
       <a class="ig-link" id="bride-ig" target="_blank" rel="noopener">Instagram &#8599;</a>
     </div>
-    <!-- <div class="amp">&amp;</div> -->
+  
     <div class="couple-card">
       <div class="eyebrow couple-label">The Groom</div>
       <img class="portrait" id="groom-photo" alt="">
@@ -764,14 +755,9 @@
 
 <div id="lightbox"><span class="close">&times;</span><img id="lightbox-img" alt=""></div>
 
-<!-- <button id="music-toggle" class="paused" aria-label="Putar/Jeda Musik">
-  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="16" r="3" fill="currentColor" stroke="none"/></svg>
-</button> -->
 <button id="music-toggle" class="paused" aria-label="Putar/Jeda Musik">
   <svg class="music-icon" viewBox="0 0 24 24" fill="currentColor">
-    <!-- Icon speaker -->
     <path d="M3 9v6h4l5 5V4L7 9H3z" stroke="none"/>
-    <!-- Gelombang suara -->
     <path class="wave wave1" d="M16 8c1.5 1.5 1.5 6 0 7.5"/>
     <path class="wave wave2" d="M19 5c3 3 3 11 0 14"/>
   </svg>
@@ -1156,7 +1142,7 @@ const CONFIG = {
 
     })();
     </script>
-      <script>
+    <script>
     // Preload semua gallery foto saat page load
     if (CONFIG.gallery && CONFIG.gallery.length > 0) {
       CONFIG.gallery.forEach(url => {
@@ -1169,29 +1155,44 @@ const CONFIG = {
     }
     </script>
     <script>
-    let scrollTimeout;
+        /* SESUDAH - Hover & Touch pause (universal) */
     const galleryGrid = document.querySelector('.gallery-grid');
     
     if (galleryGrid) {
-      window.addEventListener('scroll', () => {
-        document.querySelectorAll('.gallery-track').forEach(track => {
-          track.style.animationPlayState = 'paused';
+      // Desktop hover
+      galleryGrid.addEventListener('mouseenter', () => {
+        document.querySelectorAll('.gallery-track').forEach(t => {
+          t.style.animationPlayState = 'paused';
         });
-        
-        clearTimeout(scrollTimeout);
-        
-        scrollTimeout = setTimeout(() => {
-          document.querySelectorAll('.gallery-track').forEach(track => {
-            track.style.animationPlayState = 'running';
+      });
+    
+      galleryGrid.addEventListener('mouseleave', () => {
+        document.querySelectorAll('.gallery-track').forEach(t => {
+          t.style.animationPlayState = 'running';
+        });
+      });
+    
+      // Mobile touch
+      let touchTimeout;
+      galleryGrid.addEventListener('touchstart', () => {
+        document.querySelectorAll('.gallery-track').forEach(t => {
+          t.style.animationPlayState = 'paused';
+        });
+        clearTimeout(touchTimeout);
+      });
+    
+      galleryGrid.addEventListener('touchend', () => {
+        touchTimeout = setTimeout(() => {
+          document.querySelectorAll('.gallery-track').forEach(t => {
+            t.style.animationPlayState = 'running';
           });
-        }, 800);
+        }, 1500);
       });
     }
     </script>
   <script>
   const bgMusic = document.getElementById('bg-music');
   const musicToggle = document.getElementById('music-toggle');
-  
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       // Tab tidak aktif → pause musik
@@ -1199,8 +1200,8 @@ const CONFIG = {
       musicToggle.classList.add('paused');
     } else {
       // Tab aktif kembali → auto-resume (optional)
-      // bgMusic.play();
-      // musicToggle.classList.remove('paused');
+      bgMusic.play();
+      musicToggle.classList.remove('paused');
     }
   });
   </script>
