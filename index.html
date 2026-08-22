@@ -1020,20 +1020,17 @@ const CONFIG = {
 
   // ---------- RSVP / Comments (localStorage demo — ganti ke backend nanti) ----------
   const STORAGE_KEY = 'rsvp_comments_demo';
-  function loadComments(){
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    return JSON.parse(stored);
+  async function loadComments(){
+  // Hapus prioritas localStorage di initial load
+  // Langsung fetch dari Sheets
+  return await fetchCommentsFromSheet();
   }
-  // Jika tidak ada di localStorage, ambil dari Google Sheets
-  return fetchCommentsFromSheet();
-  }
+
   async function fetchCommentsFromSheet() {
-  try {
+    try {
     const response = await fetch(CONFIG.appsScriptUrl);
     const data = await response.json();
     
-    // Format data dari Sheets ke format komentar
     const comments = data.map(row => ({
       name: row.name || 'Anonim',
       status: row.status || 'Hadir',
@@ -1041,14 +1038,16 @@ const CONFIG = {
       ts: row.ts || new Date().toLocaleDateString('id-ID')
     }));
     
-    // Simpan ke localStorage sebagai cache
+    // Simpan ke localStorage untuk offline/smooth
     saveComments(comments);
     return comments;
     
-  } catch (error) {
-    console.error('Gagal fetch dari Google Sheets:', error);
-    return []; // Kosong jika error
-  }
+    } catch (error) {
+    console.error('Gagal fetch:', error);
+    // Kalau error, baru pake cache lama
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+    }
   }
   
   function saveComments(list){
