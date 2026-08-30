@@ -215,6 +215,115 @@
   }
   .map-btn:hover{background:var(--sage-deep); color:var(--ivory);}
 
+  /* ---------- VENUE DETAILS ---------- */
+#venue {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.venue-toggle {
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 20px 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.35s var(--ease);
+  box-shadow: var(--shadow);
+}
+
+.venue-toggle:hover {
+  border-color: var(--sage-mid);
+  background: #fafaf7;
+}
+
+.venue-toggle-text {
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  color: var(--sage-deep);
+  font-weight: 500;
+}
+
+.venue-toggle-icon {
+  font-size: 1.4rem;
+  color: var(--gold);
+  transition: transform 0.35s var(--ease);
+}
+
+.venue-toggle.open .venue-toggle-icon {
+  transform: rotate(45deg);
+}
+
+.venue-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s var(--ease), opacity 0.35s var(--ease);
+  opacity: 0;
+  padding: 0 22px;
+}
+
+.venue-content.open {
+  max-height: 500px;
+  opacity: 1;
+  padding: 24px 22px;
+}
+
+.venue-subsection {
+  text-align: left;
+}
+
+.venue-subsection:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.venue-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  color: var(--sage-deep);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.venue-text {
+  font-size: 0.88rem;
+  color: #5c5c4f;
+  line-height: 1.7;
+}
+
+.venue-text p {
+  margin-bottom: 8px;
+}
+
+.venue-text p:last-child {
+  margin-bottom: 0;
+}
+
+.venue-link {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+  border-bottom: 1px solid var(--sage-mid);
+  padding-bottom: 2px;
+  margin-top: 8px;
+  transition: all 0.3s var(--ease);
+}
+
+.venue-link:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.venue-divider {
+  height: 1px;
+  background: var(--line);
+  margin: 16px 0;
+}
+
   /* ---------- GALLERY ---------- */
   #gallery{max-width:none; padding-left:0; padding-right:0;}
   .gallery-grid{overflow:hidden; width:100%; margin:32px 0 0; padding:0 20px;}
@@ -697,6 +806,32 @@
     </div>
   </section>
 
+  <section id="venue" class="reveal">
+    <button id="venue-toggle" class="venue-toggle">
+      <span class="venue-toggle-text">📍 Location Parking Stage</span>
+      <span class="venue-toggle-icon">+</span>
+    </button>
+    <div id="venue-content" class="venue-content">
+      <div class="venue-subsection">
+        <h4 class="venue-subtitle">Parkir Mobil</h4>
+        <div class="venue-text">
+          <p><strong>Lokasi:</strong> Jl. Pedongkelan Baru No.148</p>
+          <p><strong>Info:</strong> Parkir tersedia untuk Mobil dan gratis.</p>
+          <a class="venue-link" href="https://maps.app.goo.gl/Jm98eT33W4bYfZaN9" target="_blank" rel="noopener">Lihat Lokasi Parkir ↗</a>
+        </div>
+      </div>
+      <div class="venue-divider"></div>
+      <div class="venue-subsection">
+        <h4 class="venue-subtitle">Parkir Motor</h4>
+        <div class="venue-text">
+          <p><strong>Lokasi</strong>Jl. Karya Bakti Timur, Cengkareng, Jakarta Barat</p>
+          <p><strong>Info:</strong> Parkir Motor tersedia dekat venue dan gratis</p>
+          <p style="margin-top: 8px; font-size: .9rem;"><em></em></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="gallery" class="reveal">
   <div class="eyebrow">Our Lovely Moment</div>
   <div class="gallery-grid">
@@ -946,6 +1081,15 @@ const CONFIG = {
   $('gift-note').textContent = CONFIG.giftNote;
   $('address-recipient').textContent = CONFIG.giftAddress.recipient;
   $('address-detail').textContent = CONFIG.giftAddress.detail;
+
+// ---------- Venue toggle ----------
+  const venueToggle = $('venue-toggle');
+  const venueContent = $('venue-content');
+
+  venueToggle.addEventListener('click', () => {
+    venueToggle.classList.toggle('open');
+    venueContent.classList.toggle('open');
+  });
 
 
   // ---------- Countdown ----------
